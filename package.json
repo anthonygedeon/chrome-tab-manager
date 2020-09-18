@@ -1,0 +1,35 @@
+{
+  "name": "chrome-tab-manager",
+  "version": "0.1.0",
+  "description": "Easily and quickly navigate through your chrome tabs",
+  "main": "background.js",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "test": "jest",
+    "lint": "eslint --fix *.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/anthonygedeon/chrome-tab-manager.git"
+  },
+  "keywords": [
+    "chrome",
+    "tabs",
+    "extension",
+    "javascript"
+  ],
+  "author": "Anthony Gedeon",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/anthonygedeon/chrome-tab-manager/issues"
+  },
+  "homepage": "https://github.com/anthonygedeon/chrome-tab-manager#readme",
+  "devDependencies": {
+    "eslint": "^7.9.0",
+    "eslint-config-airbnb-base": "^14.2.0",
+    "eslint-plugin-import": "^2.22.0",
+    "jest": "^26.4.2"
+  }
+}
