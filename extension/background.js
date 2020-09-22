@@ -1,5 +1,12 @@
-chrome.runtime.onInstalled.addListener(() => {
+chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
 
-    console.log('hello')
+    // chrome.runtime.sendMessage({ data }, (response) => {
 
-})
+        sendResponse({ status: true })
+
+    // })
+
+    console.log(message.data)
+
+    return true;
+});

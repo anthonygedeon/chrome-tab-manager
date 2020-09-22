@@ -7,18 +7,14 @@
 	"permissions": [
 		"activeTab",
 		"declarativeContent",
-		"<all_urls>",
 		"background",
 		"storage"
 	],
 
-	"content_scripts": [
-		{
-			"matches": ["<all_urls>"],
-			"css": ["./extension/popup.css"],
-			"js": ["./extension/background.js", "./extension/popup.js"]
-		}
-	],
+	"background": {
+		"scripts": ["./extension/background.js"],
+		"persisted": false
+	},
 
 	"browser_action": {
 		"default_title": "Tab manager",
