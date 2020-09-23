@@ -9,7 +9,7 @@
   "scripts": {
     "test": "jest",
     "lint": "eslint --fix *.js",
-    "start": "electron extension/dashboard.js"
+    "start": "electron extension/main.js"
   },
   "repository": {
     "type": "git",
@@ -28,7 +28,6 @@
   },
   "homepage": "https://github.com/anthonygedeon/chrome-tab-manager#readme",
   "devDependencies": {
-    "electron": "^10.1.2",
     "eslint": "^7.9.0",
     "eslint-config-airbnb-base": "^14.2.0",
     "eslint-plugin-import": "^2.22.0",

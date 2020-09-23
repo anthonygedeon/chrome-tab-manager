@@ -13,7 +13,7 @@
 
 	"background": {
 		"scripts": ["./extension/background.js"],
-		"persisted": false
+		"persisted": true
 	},
 
 	"browser_action": {
