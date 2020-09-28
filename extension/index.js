@@ -14,8 +14,7 @@ function generateTabList() {
 		);
 	}
 
-
-	browser.tabs.query({}, (tabs) => {
+	manager.tabs((tabs) => {
 		for (let tab of tabs) {
 			const tabComponent = tabHtml(tab);
 
@@ -51,110 +50,111 @@ document.querySelector('.tab-collection').addEventListener('click', (event) => {
 renderTabList();
 
 class Navigator {
-
 	/**
-	 * 
+	 *
 	 */
-	constructor(list) {
-		this.list = list;
-		this.index = 0;
-		this.limit = list.length;
+	constructor() {
+		this.lists = [];
+		this.index = -1;
+		this.limit = null;
+
+		this.setTabs();
 	}
 
 	/**
-	 * 
+	 *
+	 */
+	setTabs() {
+		manager.tabs((tabs) => {
+			this.limit = tabs.length;
+
+			for (let tab of tabs) {
+				this.lists.push(tab);
+			}
+		});
+	}
+
+	/**
+	 *
 	 */
 	up() {
-
-		if (this.index > this.limit) {
-
-			this.index = 0;
-
-		}
-
-		this.index += 1;
-
-		return this.index;
-	}
-
-	/**
-	 * 
-	 */
-	down() {
-
-		if (this.index < this.limit) {
-
+		if (this.index > this.limit || this.index <= 0) {
 			this.index = this.limit;
-
 		}
 
 		this.index -= 1;
 
-		return this.index;
+		console.log('Up:', this.index, this.limit, this.lists);
 
+		return this.index;
 	}
 
 	/**
-	 * 
+	 *
+	 */
+	down() {
+		if (this.index === this.limit - 1) {
+			this.index = -1;
+		}
+
+		this.index += 1;
+
+		console.log('Down:', this.index, this.limit, this.lists);
+
+		return this.index;
+	}
+
+	/**
+	 *
 	 */
 	getId() {
-
-		return this.list[this.index].id;
-
+		return this.lists[Number(this.index)].id;
 	}
-
 }
 
-const navigator = new Navigator(manager.tabs);
-
-let currentTabCount = 1;
+const navigator = new Navigator();
 
 window.addEventListener('keydown', (event) => {
-
-	if (event.key === 'ArrowDown') {
-
-		console.log('Down', currentTabCount)
-
-		document.querySelectorAll('.tab').forEach(tab => tab.classList.remove('tab--active'));
-		
-		if (currentTabCount > manager.tabs.length) currentTabCount = 1;
-		
-		const selectedTab = document.querySelector(`.tab:nth-child(${currentTabCount})`); 
-
-		selectedTab.classList.add('tab--active');
-
-		currentTabCount++;
-
-		window.addEventListener('keydown', (event) => {
-			if (event.key === 'Enter') {
-				const tabId = Number(selectedTab.dataset.id);	
-				manager.goto(tabId);
-			}
-		});
-
-	}
-
 	if (event.key === 'ArrowUp') {
+		navigator.up();
 
-		if (currentTabCount === 0) currentTabCount = manager.tabs.length;
+		document
+			.querySelectorAll('.tab')
+			.forEach((tab) => tab.classList.remove('tab--active'));
 
-		document.querySelectorAll('.tab').forEach(tab => tab.classList.remove('tab--active'));
-		
-		currentTabCount -= 1;
-		
-		console.log('Up', currentTabCount);
-
-		const selectedTab = document.querySelector(`.tab:nth-child(${currentTabCount})`); 
+		const selectedTab = document.querySelector(
+			`[data-id="${navigator.getId()}"]`
+		);
 
 		selectedTab.classList.add('tab--active');
 
 		window.addEventListener('keydown', (event) => {
 			if (event.key === 'Enter') {
 				const tabId = Number(selectedTab.dataset.id);
-	
+
 				manager.goto(tabId);
 			}
 		});
 	}
 
+	if (event.key === 'ArrowDown') {
+		navigator.down();
+
+		document
+			.querySelectorAll('.tab')
+			.forEach((tab) => tab.classList.remove('tab--active'));
+
+		const selectedTab = document.querySelector(
+			`[data-id="${navigator.getId()}"]`
+		);
+
+		selectedTab.classList.add('tab--active');
+
+		window.addEventListener('keydown', (event) => {
+			if (event.key === 'Enter') {
+				const tabId = Number(selectedTab.dataset.id);
+				manager.goto(tabId);
+			}
+		});
+	}
 });

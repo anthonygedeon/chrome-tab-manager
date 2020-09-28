@@ -2,29 +2,28 @@ const browser = window.msBrowser || window.browser || window.chrome;
 
 export class TabManager {
 
-	constructor() {
+	/**
+	 * 
+	 */
+    constructor() {
 
-		browser.tabs.query({}, (tabs) => {
-			for (let tab of tabs) {
+		this.tabs = (callback) => browser.tabs.query({}, (tabs) => callback(tabs));
 
-				this.tabs.push(tab);
+    }
 
-			}
-		});
+	/**
+	 * 
+	 * @param {*} tabId 
+	 */
+    closeTab(tabId) {
+        browser.tabs.remove(tabId);
+    }
 
-		this.tabs = [];
-
-	}
-
-	closeTab(tabId) {
-
-		browser.tabs.remove(tabId)
-
-		return this.tabs.filter(tab => tab.id !== tabId);
-	}
-
-	goto(tabId) {
-		browser.tabs.update(tabId, { active: true });
-	}
-
+	/**
+	 * 
+	 * @param {*} tabId 
+	 */
+    goto(tabId) {
+        browser.tabs.update(tabId, { active: true });
+    }
 }
