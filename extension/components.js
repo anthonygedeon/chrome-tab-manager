@@ -20,7 +20,9 @@ Clear search
 <span class="shortcut">esc</span>
 </button>`;
 
-export const tabHtml = ({ id, url, title, favIconUrl }) => `<div class="tab" data-id="${id}">
+export const tabHtml = ({
+    id, url, title, favIconUrl,
+}) => `<div class="tab" data-id="${id}">
 <div class="tab__left">
 <div class="tab__favicon-container">
 <img src=${favIconUrl} alt="tab favicon" class="tab__favicon">
