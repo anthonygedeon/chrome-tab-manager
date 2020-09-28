@@ -1,65 +1,160 @@
-import { clearButtonHtml, shortcutEscHtml } from './components.js';
+import { TabManager } from './tab-manager.js';
+import { clearButtonHtml, shortcutEscHtml, tabHtml } from './components.js';
 
-const inputTargetContainer = document.querySelector('.current-lookup__target');
-const targetInput = document.querySelector('.current-lookup__input');
-const tabsContainer = document.querySelector('.current-lookup__tabs');
-const clearEscButton = document.querySelector('.current-lookup__clear');
+const tabListContainer = document.querySelector('.tab-collection');
 
 const browser = window.msBrowser || window.browser || window.chrome;
 
-class TabManager {
+const manager = new TabManager();
 
-	constructor() {
+function generateTabList() {
+	if (tabListContainer.hasChildNodes()) {
+		Array.from(tabListContainer.childNodes).forEach((node) =>
+			node.remove()
+		);
+	}
 
-		browser.tabs.query({}, (tabs) => {
-			for (let tab of tabs) {
 
-				this.tabs.push(tab);
+	browser.tabs.query({}, (tabs) => {
+		for (let tab of tabs) {
+			const tabComponent = tabHtml(tab);
 
+			tabListContainer.insertAdjacentHTML('beforeend', tabComponent);
+		}
+	});
+}
+
+function renderTabList() {
+	generateTabList();
+}
+
+document.querySelector('.tab-collection').addEventListener('click', (event) => {
+	if (event.target.classList.contains('tab')) {
+		const id = Number(event.target.dataset.id);
+
+		manager.goto(id);
+
+		renderTabList();
+	}
+
+	if (event.target.classList.contains('clear-icon')) {
+		const removeId = Number(
+			event.target.parentElement.parentElement.dataset.id
+		);
+
+		manager.closeTab(removeId);
+
+		renderTabList();
+	}
+});
+
+renderTabList();
+
+class Navigator {
+
+	/**
+	 * 
+	 */
+	constructor(list) {
+		this.list = list;
+		this.index = 0;
+		this.limit = list.length;
+	}
+
+	/**
+	 * 
+	 */
+	up() {
+
+		if (this.index > this.limit) {
+
+			this.index = 0;
+
+		}
+
+		this.index += 1;
+
+		return this.index;
+	}
+
+	/**
+	 * 
+	 */
+	down() {
+
+		if (this.index < this.limit) {
+
+			this.index = this.limit;
+
+		}
+
+		this.index -= 1;
+
+		return this.index;
+
+	}
+
+	/**
+	 * 
+	 */
+	getId() {
+
+		return this.list[this.index].id;
+
+	}
+
+}
+
+const navigator = new Navigator(manager.tabs);
+
+let currentTabCount = 1;
+
+window.addEventListener('keydown', (event) => {
+
+	if (event.key === 'ArrowDown') {
+
+		console.log('Down', currentTabCount)
+
+		document.querySelectorAll('.tab').forEach(tab => tab.classList.remove('tab--active'));
+		
+		if (currentTabCount > manager.tabs.length) currentTabCount = 1;
+		
+		const selectedTab = document.querySelector(`.tab:nth-child(${currentTabCount})`); 
+
+		selectedTab.classList.add('tab--active');
+
+		currentTabCount++;
+
+		window.addEventListener('keydown', (event) => {
+			if (event.key === 'Enter') {
+				const tabId = Number(selectedTab.dataset.id);	
+				manager.goto(tabId);
 			}
 		});
 
-		this.tabs = [];
-
 	}
 
-	closeTab(tabId) {
-		return this.tabs.filter(tab => tab.id === tabId);
-	}
+	if (event.key === 'ArrowUp') {
 
-}
+		if (currentTabCount === 0) currentTabCount = manager.tabs.length;
 
-const tabManager = new TabManager();
+		document.querySelectorAll('.tab').forEach(tab => tab.classList.remove('tab--active'));
+		
+		currentTabCount -= 1;
+		
+		console.log('Up', currentTabCount);
 
+		const selectedTab = document.querySelector(`.tab:nth-child(${currentTabCount})`); 
 
-/**
- *
- */
-function searchForTab() {}
+		selectedTab.classList.add('tab--active');
 
-function clearInputField(node) {
-	return (node.value = '');
-}
-
-targetInput.addEventListener('keyup', (event) => {
-	const clearButton = document.querySelector(
-		'.current-lookup__clear-container'
-	);
-
-	if (inputTargetContainer.contains(clearButton)) {
-		clearButton.addEventListener('click', () => {
-			clearInputField(targetInput);
-			clearEscButton.remove();
-			clearButton.remove();
+		window.addEventListener('keydown', (event) => {
+			if (event.key === 'Enter') {
+				const tabId = Number(selectedTab.dataset.id);
+	
+				manager.goto(tabId);
+			}
 		});
-
-		if (targetInput.value === '') {
-			inputTargetContainer.removeChild(clearButton);
-			clearButton.removeEventListener('click');
-		}
-
-		return;
 	}
 
-	inputTargetContainer.insertAdjacentHTML('beforeend', clearButtonHtml);
 });
