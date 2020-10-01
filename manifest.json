@@ -1,8 +1,8 @@
 {
-	"name": "Tab manager",
+	"name": "Partizion",
 	"version": "0.1.0",
-	"description": "Easily and quickly navigate through your chrome tabs",
-	"short_name": "Chrome tab manager",
+	"description": "Organize, find, and manage your work in the browser.",
+	"short_name": "Partizion",
 	"manifest_version": 2,
 	"permissions": ["activeTab", "tabs"],
 
@@ -10,13 +10,19 @@
 		"scripts": ["./extension/background.js"]
 	},
 
+	"icons" : {
+		"32": "./extension/icons/32-circle-favicon.png",
+		"16": "./extension/icons/16-circle-favicon.png",
+		"48": "./extension/icons/48-favicon.png"
+	},
+
 	"commands": {
-		"start_application": {
+		"open_partizion_search": {
 			"suggested_key": {
-				"default": "Ctrl+Shift+F",
-				"mac": "MacCtrl+Shift+F"
+				"default": "Ctrl+Shift+S",
+				"mac": "MacCtrl+Shift+S"
 			},
-			"description": "Start the application"
+			"description": "Open Partizion search"
 		}
 	}
 }

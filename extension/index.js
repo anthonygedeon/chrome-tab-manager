@@ -1,4 +1,7 @@
-import { TabManager } from './tab-manager.js';
+/* eslint-disable */
+
+import { TabManager } from './TabManager.js';
+import TabNavigator from './Navigator.js';
 import { clearButtonHtml, shortcutEscHtml, tabHtml } from './components.js';
 
 const tabListContainer = document.querySelector('.tab-collection');
@@ -6,6 +9,17 @@ const tabListContainer = document.querySelector('.tab-collection');
 const browser = window.msBrowser || window.browser || window.chrome;
 
 const manager = new TabManager();
+const tabNavigator = new TabNavigator();
+
+function closeWindow() {
+	browser.windows.getAll({}, (windows) => {
+
+		const popupId = windows.filter(window => window.type === 'popup')[0].id;
+
+		browser.windows.remove(popupId);
+	
+	});
+}
 
 function generateTabList() {
 	if (tabListContainer.hasChildNodes()) {
@@ -15,10 +29,24 @@ function generateTabList() {
 	}
 
 	manager.tabs((tabs) => {
-		for (let tab of tabs) {
+		for (const tab of tabs) {
+			console.log(tabs);
+
 			const tabComponent = tabHtml(tab);
 
 			tabListContainer.insertAdjacentHTML('beforeend', tabComponent);
+
+			if (tab.favIconUrl === '') {
+				const faviconContainer = document.querySelector(
+					` [data-id="${tab.id}"] .tab__favicon-container`
+				);
+
+				faviconContainer
+					.querySelector(` [data-id="${tab.id}"] .tab__favicon`)
+					.remove();
+
+				faviconContainer.classList.add('tab__favicon-container--base');
+			}
 		}
 	});
 }
@@ -27,13 +55,42 @@ function renderTabList() {
 	generateTabList();
 }
 
+function enterHandler() {
+	window.addEventListener('keydown', (event) => {
+		if (event.key === 'Enter') {
+			const id = tabNavigator.tabId;
+			manager.goto(id);
+			closeWindow();
+		}
+	});
+}
+
+function tabScrolling() {
+	document
+		.querySelectorAll('.tab')
+		.forEach((tab) => tab.classList.remove('tab--active'));
+
+	const selectedTab = document.querySelector(
+		`[data-id="${tabNavigator.tabId}"]`
+	);
+
+	selectedTab.classList.add('tab--active');
+}
+
 document.querySelector('.tab-collection').addEventListener('click', (event) => {
 	if (event.target.classList.contains('tab')) {
 		const id = Number(event.target.dataset.id);
 
+		manager.tabs((tabs) => {
+			const indexOfTab = tabs.findIndex((tab) => tab.id === id);
+
+			tabNavigator.tabIndex = indexOfTab;
+		});
+
 		manager.goto(id);
 
-		renderTabList();
+		closeWindow();
+
 	}
 
 	if (event.target.classList.contains('clear-icon')) {
@@ -47,114 +104,36 @@ document.querySelector('.tab-collection').addEventListener('click', (event) => {
 	}
 });
 
-renderTabList();
 
-class Navigator {
-	/**
-	 *
-	 */
-	constructor() {
-		this.lists = [];
-		this.index = -1;
-		this.limit = null;
-
-		this.setTabs();
-	}
-
-	/**
-	 *
-	 */
-	setTabs() {
-		manager.tabs((tabs) => {
-			this.limit = tabs.length;
-
-			for (let tab of tabs) {
-				this.lists.push(tab);
-			}
-		});
-	}
-
-	/**
-	 *
-	 */
-	up() {
-		if (this.index > this.limit || this.index <= 0) {
-			this.index = this.limit;
-		}
-
-		this.index -= 1;
-
-		console.log('Up:', this.index, this.limit, this.lists);
-
-		return this.index;
-	}
-
-	/**
-	 *
-	 */
-	down() {
-		if (this.index === this.limit - 1) {
-			this.index = -1;
-		}
-
-		this.index += 1;
-
-		console.log('Down:', this.index, this.limit, this.lists);
-
-		return this.index;
-	}
-
-	/**
-	 *
-	 */
-	getId() {
-		return this.lists[Number(this.index)].id;
-	}
-}
-
-const navigator = new Navigator();
 
 window.addEventListener('keydown', (event) => {
-	if (event.key === 'ArrowUp') {
-		navigator.up();
+	switch (event.key) {
+		case 'ArrowUp':
+			tabNavigator.up();
 
-		document
-			.querySelectorAll('.tab')
-			.forEach((tab) => tab.classList.remove('tab--active'));
+			tabScrolling();
 
-		const selectedTab = document.querySelector(
-			`[data-id="${navigator.getId()}"]`
-		);
+			enterHandler();
+			break;
 
-		selectedTab.classList.add('tab--active');
+		case 'ArrowDown':
+			tabNavigator.down();
 
-		window.addEventListener('keydown', (event) => {
-			if (event.key === 'Enter') {
-				const tabId = Number(selectedTab.dataset.id);
+			tabScrolling();
 
-				manager.goto(tabId);
-			}
-		});
-	}
+			enterHandler();
+			break;
 
-	if (event.key === 'ArrowDown') {
-		navigator.down();
-
-		document
-			.querySelectorAll('.tab')
-			.forEach((tab) => tab.classList.remove('tab--active'));
-
-		const selectedTab = document.querySelector(
-			`[data-id="${navigator.getId()}"]`
-		);
-
-		selectedTab.classList.add('tab--active');
-
-		window.addEventListener('keydown', (event) => {
-			if (event.key === 'Enter') {
-				const tabId = Number(selectedTab.dataset.id);
-				manager.goto(tabId);
-			}
-		});
+		default:
+			break;
 	}
 });
+
+window.addEventListener('DOMContentLoaded', () => {
+
+	renderTabList();
+
+	document.querySelector('.current-lookup__input').focus();
+
+});
+

@@ -2,7 +2,7 @@
 <html>
 	<head>
 		<meta charset="UTF-8" />
-		<title>Tabby</title>
+		<title>Partizion Search</title>
 		<meta
 			http-equiv="Content-Security-Policy"
 			content="script-src 'self' 'unsafe-inline';"
@@ -13,7 +13,13 @@
 		<header class="header">
 			<div class="container row header__container header__row">
 				<div class="header__logo-container">
-					<div class="logo"></div>
+					<a href="#" class="logo-link">
+						<img
+							src="./images/partizion-logo.svg"
+							class="logo"
+							alt="Partizion logo"
+						/>
+					</a>
 				</div>
 
 				<div class="current-lookup">
@@ -110,42 +116,78 @@
 					<h2 class="window__id">Window 1</h2>
 
 					<div class="tab-collection">
-
-						<!-- <div class="tab">
+						<div class="tab">
 							<div class="tab__left">
 								<div class="tab__favicon-container">
-									<img src="" alt="tab favicon" class="tab__favicon">
+									<img
+										src=""
+										alt="tab favicon"
+										class="tab__favicon"
+									/>
 								</div>
 								<div>
 									<h2 class="tab__title">Today: Todoist</h2>
-									<p class="tab__url">https://todoist.com/app</p>
+									<p class="tab__url">
+										https://todoist.com/app
+									</p>
 								</div>
 							</div>
 							<div class="tab__right">
+								<div class="active-tab">
+									<p class="active-tab__text">Active Tab</p>
+								</div>
 								<button class="current-lookup__clear-container">
-								<svg
-									class="clear-icon"
-									xmlns="http://www.w3.org/2000/svg"
-									height="24"
-									viewBox="0 0 24 24"
-									width="24"
-								>
-									<path d="M0 0h24v24H0z" fill="none" />
-									<path
-										d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"
-									/>
-								</svg>
-							</button>
+									
+									<svg
+										class="clear-icon"
+										xmlns="http://www.w3.org/2000/svg"
+										height="24"
+										viewBox="0 0 24 24"
+										width="24"
+									>
+										<path d="M0 0h24v24H0z" fill="none" />
+										<path
+											d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"
+										/>
+									</svg>
+								</button>
 							</div>
-						</div> -->
-
+						</div>
 					</div>
 				</div>
 			</div>
 		</div>
 
 		<footer class="footer">
-			<div class="footer__row footer__container container row"></div>
+			<div class="footer__row footer__container container row">
+				<svg
+					class="scroll-icon"
+					xmlns="http://www.w3.org/2000/svg"
+					height="24"
+					viewBox="0 0 24 24"
+					width="24"
+				>
+					<path d="M0 0h24v24H0z" fill="none" />
+					<path
+						d="M9 3L5 6.99h3V14h2V6.99h3L9 3zm7 14.01V10h-2v7.01h-3L15 21l4-3.99h-3z"
+					/>
+				</svg>
+				<p class="footer__text">Select results</p>
+				<button class="footer__help-btn">
+					<svg
+						class="help-icon"
+						xmlns="http://www.w3.org/2000/svg"
+						height="24"
+						viewBox="0 0 24 24"
+						width="24"
+					>
+						<path d="M0 0h24v24H0z" fill="none" />
+						<path
+							d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 17h-2v-2h2v2zm2.07-7.75l-.9.92C13.45 12.9 13 13.5 13 15h-2v-.5c0-1.1.45-2.1 1.17-2.83l1.24-1.26c.37-.36.59-.86.59-1.41 0-1.1-.9-2-2-2s-2 .9-2 2H8c0-2.21 1.79-4 4-4s4 1.79 4 4c0 .88-.36 1.68-.93 2.25z"
+						/>
+					</svg>
+				</button>
+			</div>
 		</footer>
 
 		<script type="module" src="./index.js"></script>
