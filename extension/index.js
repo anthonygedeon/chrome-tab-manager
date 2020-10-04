@@ -1,5 +1,6 @@
 /* eslint-disable */
 
+import { KEY_NAME } from './util.js';
 import { TabManager } from './TabManager.js';
 import CollectionNavigator from './CollectionNavigator.js';
 import { clearButtonHtml, shortcutEscHtml, tabHtml } from './components.js';
@@ -66,13 +67,31 @@ function generateTabList() {
 	});
 }
 
+function searchForTab() {
+
+	const inputFieldText = document.querySelector('.current-lookup__input').value;
+
+	const regex = new RegExp(`${inputFieldText}`, 'g')
+
+	manager.tabs((tabs) => {
+
+		for (let tab of tabs) {
+			tab.url = tab.url.replace(regex, (match) => `<strong>${match}</strong>`)
+			console.log(tabHtml(tab))
+		}
+
+	});
+	
+
+}
+
 function renderTabList() {
 	generateTabList();
 }
 
 function enterHandler() {
 	window.addEventListener('keydown', (event) => {
-		if (event.key === 'Enter') {
+		if (event.key === KEY_NAME.enter) {
 			const id = tabNavigator.tabId;
 			manager.goto(id);
 			closePopup();
@@ -123,7 +142,7 @@ document.querySelector('.tab-collection').addEventListener('click', (event) => {
 
 window.addEventListener('keydown', (event) => {
 	switch (event.key) {
-		case 'ArrowUp':
+		case KEY_NAME.arrowUp:
 			tabNavigator.up();
 
 			tabScrolling();
@@ -131,15 +150,12 @@ window.addEventListener('keydown', (event) => {
 			enterHandler();
 			break;
 
-		case 'ArrowDown':
+		case KEY_NAME.arrowDown:
 			tabNavigator.down();
 
 			tabScrolling();
 
 			enterHandler();
-			break;
-
-		default:
 			break;
 	}
 });
@@ -149,5 +165,12 @@ window.addEventListener('DOMContentLoaded', () => {
 	renderTabList();
 
 	document.querySelector('.current-lookup__input').focus();
+
+});
+
+document.querySelector('.current-lookup__input').addEventListener('keydown', (event) => {
+
+
+	searchForTab();
 
 });

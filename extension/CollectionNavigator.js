@@ -52,6 +52,7 @@ export default class CollectionNavigator {
 
 		this.index += 1;
 
+
 		return this.index;
 	}
 
