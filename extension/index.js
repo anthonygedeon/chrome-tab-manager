@@ -1,7 +1,7 @@
 /* eslint-disable */
 
 import { TabManager } from './TabManager.js';
-import TabNavigator from './Navigator.js';
+import CollectionNavigator from './CollectionNavigator.js';
 import { clearButtonHtml, shortcutEscHtml, tabHtml } from './components.js';
 
 const tabListContainer = document.querySelector('.tab-collection');
@@ -9,9 +9,25 @@ const tabListContainer = document.querySelector('.tab-collection');
 const browser = window.msBrowser || window.browser || window.chrome;
 
 const manager = new TabManager();
-const tabNavigator = new TabNavigator();
+const tabNavigator = new CollectionNavigator(getTabs());
 
-function closeWindow() {
+function getTabs() {
+
+	const allTabs = [];
+
+	manager.tabs((tabs) => {
+
+		for (let tab of tabs) {
+			allTabs.push(tab);
+		}
+
+	});
+
+	return allTabs;
+
+}
+
+function closePopup() {
 	browser.windows.getAll({}, (windows) => {
 
 		const popupId = windows.filter(window => window.type === 'popup')[0].id;
@@ -30,7 +46,6 @@ function generateTabList() {
 
 	manager.tabs((tabs) => {
 		for (const tab of tabs) {
-			console.log(tabs);
 
 			const tabComponent = tabHtml(tab);
 
@@ -60,7 +75,7 @@ function enterHandler() {
 		if (event.key === 'Enter') {
 			const id = tabNavigator.tabId;
 			manager.goto(id);
-			closeWindow();
+			closePopup();
 		}
 	});
 }
@@ -84,12 +99,12 @@ document.querySelector('.tab-collection').addEventListener('click', (event) => {
 		manager.tabs((tabs) => {
 			const indexOfTab = tabs.findIndex((tab) => tab.id === id);
 
-			tabNavigator.tabIndex = indexOfTab;
+			tabNavigator.collectionIndex = indexOfTab;
 		});
 
 		manager.goto(id);
 
-		closeWindow();
+		closePopup();
 
 	}
 
@@ -136,4 +151,3 @@ window.addEventListener('DOMContentLoaded', () => {
 	document.querySelector('.current-lookup__input').focus();
 
 });
-

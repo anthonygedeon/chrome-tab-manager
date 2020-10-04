@@ -1,32 +1,32 @@
-import { TabManager } from './TabManager.js';
+
 /* eslint-disable */
-export default class TabNavigator {
+export default class CollectionNavigator {
 	/**
 	 *
 	 */
-	constructor() {
-		this.lists = [];
+	constructor(lists) {
+		this.lists = lists;
 		this.index = -1;
 		this.limit = null;
-
-		this.setTabs();
 	}
 
 	/**
-	 *
+	 * 
 	 */
-	setTabs() {
-		new TabManager().tabs((tabs) => {
-			this.limit = tabs.length;
-
-			for (const tab of tabs) {
-				this.lists.push(tab);
-			}
-		});
+	set collectionIndex(value) {
+		this.index = value;
 	}
 
-	set tabIndex(value) {
-		this.index = value;
+	/**
+	 * 
+	 */
+	get currentCollectionItem() {
+
+		if (this.index < 0) {
+			throw new Error(`${this.index} is too low for collection. Please use the up and down methods to increase/decrease the index.`);
+		}
+
+		return collection[this.index];
 	}
 
 	/**
@@ -59,6 +59,9 @@ export default class TabNavigator {
 	 *
 	 */
 	get tabId() {
+
+		this.limit = this.lists.length;
+
 		return this.lists[Number(this.index)].id;
 	}
 }
