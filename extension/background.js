@@ -1,3 +1,5 @@
+/* eslint-disable */
+
 // Determines what browser the user is on.
 const browser = window.msBrowser || window.browser || window.chrome;
 
@@ -26,8 +28,20 @@ function createSearchPopup() {
 	});
 }
 
+function removePopups() {
+	browser.windows.getAll({}, (windows) => {
+		windows.forEach((window) => {
+			if (window.type === 'popup') {
+				browser.windows.remove(window.id);
+			}
+		});
+	});
+}
+
 browser.commands.onCommand.addListener((command) => {
 	if (command === 'open_partizion_search') {
+		removePopups();
+
 		createSearchPopup();
 	}
 });
