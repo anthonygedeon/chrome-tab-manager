@@ -26,13 +26,7 @@ Clear search
 <span class="shortcut">esc</span>
 </button>`;
 
-export const tabHtml = ({
-	id,
-	url,
-	title,
-    favIconUrl,
-    active
-}) => `
+export const tabHtml = ({ id, url, title, favIconUrl, active }) => `
 <div class="tab" data-id="${id}">
 <div class="tab__left">
 <div class="tab__favicon-container">
@@ -48,3 +42,16 @@ export const tabHtml = ({
     ${active ? clearButtonHtml : ''}
 </div>
 </div>`;
+
+export const windowHtml = ({id, focused}) => `
+<div class="window" data-id="${id}">
+    
+    <h2 class="window__id">Window ${1}</h2>
+
+    ${focused ? activeTabTag : ''}
+
+    <div class="tab-collection"></div>
+
+</div>
+
+`;
