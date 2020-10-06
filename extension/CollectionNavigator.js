@@ -26,7 +26,7 @@ export default class CollectionNavigator {
 			throw new Error(`${this.index} is too low for collection. Please use the up and down methods to increase/decrease the index.`);
 		}
 
-		return collection[this.index];
+		return this.lists[this.index];
 	}
 
 	/**
