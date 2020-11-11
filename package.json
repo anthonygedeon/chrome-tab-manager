@@ -4,6 +4,7 @@
   "description": "Scaffolding for a Chrome extension built with [Preact](https://preactjs.com).",
   "main": "index.js",
   "scripts": {
+    "watch": "webpack --watch && npm run copy:dist",
     "build": "webpack && npm run copy:dist",
     "copy:dist": "cp ./src/popup.html manifest.json ./dist"
   },
