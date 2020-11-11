@@ -1,0 +1,138 @@
+:root {
+    --primary-font: 'Roboto', sans-serif;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    width: 430px;
+    background-color: #19181B;
+    font-family: var(--primary-font);
+}
+
+a {
+    text-decoration: none;
+    color: inherit;
+}
+
+.container {
+    max-width: 400px;
+    width: 100%;
+    margin: 0 auto;
+}
+
+.row {
+    display: flex;
+
+    &--center {
+        align-items: center;
+    }
+
+    &--space-between {
+        justify-content: space-between;
+    }
+
+    &--right {
+        justify-content: flex-end;
+    }
+}
+
+.search-tabs {
+    padding: 2em 0;
+
+    &__search-bar {
+        display: flex;
+        align-items: center;
+        width: 100%;
+    }
+
+    &__counter {
+        width: 2.25rem;
+        background: hsl(270deg, 6%, 13%);
+        border-radius: 1rem;
+        padding: 0.15rem;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    &__total {
+        font-size: 1rem;
+        font-weight: 500;
+        text-align: center;
+        color: hsl(0deg, 0%, 89%);
+    }
+
+    &__input {
+        border: none;
+        background-color: transparent;
+        font-size: 1rem;
+        color: #E3E3E3;
+        font-weight: 500;
+        outline: none;
+        height: 100%;
+        width: 80%;
+
+        &::placeholder {
+            font-weight: 300;
+            font-size: 1.2rem;
+            color: #62626A;
+        }
+    }
+
+    & .search-icon {
+        margin-right: 0.6em;
+        color: #62626A;
+    }
+}
+
+.tab {
+    padding: 1.5em;
+
+    &__content {
+        display: flex;
+        align-items: center;
+    }
+
+    &__favicon-container {
+        margin-right: 0.6em;
+        border-radius: 50%;
+        width: 2rem;
+        height: 2rem;
+        padding: 0.5rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background-color: #232323;
+    }
+
+    &__title {
+        overflow: hidden;
+        white-space: nowrap;
+        color: #E3E3E3;
+        font-weight: 700;
+        font-size: 1.25rem;
+        text-overflow: ellipsis;
+        max-width: 90%;
+    }
+
+    &__link {
+        color: #62626A;
+        letter-spacing: 0.4px;
+        font-size: 0.75rem;
+        font-weight: 400;
+    }
+}
+
+.footer {
+    border-top: 1px solid #202022;
+    padding: 1em 0;
+
+    & .settings-icon {
+        color: #E3E3E3;
+    }
+}
